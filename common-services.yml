@@ -1,0 +1,9 @@
+version: "2.4"
+services:
+  Eclilar_backend:
+    build: .
+    working_dir: src
+    extra_hosts:
+      - "srvorasetpro02.unit.br:10.88.0.43"
+    environment:
+      - TZ=America/Cuiaba
