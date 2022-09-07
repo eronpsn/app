@@ -1,11 +1,10 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 
-ENV TZ=America/Recife
-RUN echo "America/Recife" > /etc/timezone
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /src
 COPY ["Eclilar.WebApi/Eclilar.WebApi.csproj", "Eclilar.WebApi/"]
 COPY ["Eclilar.InjecaoDependencia/Eclilar.InjecaoDependencia.csproj", "Eclilar.InjecaoDependencia/"]
@@ -26,4 +25,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 #ENTRYPOINT ["dotnet", "Eclilar.WebApi.dll"]
-CMD ASPNETCORE_URLS="http://*:$PORT" dotnet ProdutosApi.dll
+CMD ASPNETCORE_URLS ="http://*:$PORT" dotnet EclilarApi.dll
