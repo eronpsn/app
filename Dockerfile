@@ -25,4 +25,5 @@ RUN dotnet publish "Eclilar.WebApi.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Eclilar.WebApi.dll"]
+#ENTRYPOINT ["dotnet", "Eclilar.WebApi.dll"]
+CMD ASPNETCORE_URLS="http://*:$PORT" dotnet ProdutosApi.dll
