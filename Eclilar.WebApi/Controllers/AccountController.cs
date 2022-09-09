@@ -250,6 +250,7 @@ namespace Eclilar.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(" Erro:", ex.Message);
                 return new StatusCodeResult(500);
             }
         }

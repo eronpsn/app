@@ -1,3 +1,3 @@
-# Grupo Tiradentes Eclilar / BackEnd
+# Eclilar / BackEnd
 
-Grupo Tiradentes Eclilar / BackEnd
+ Eclilar / BackEnd

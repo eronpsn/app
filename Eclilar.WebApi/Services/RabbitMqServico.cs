@@ -3,21 +3,32 @@ using System.Text;
 using System.Threading.Tasks;
 using Eclilar.Dominio.Entidades.Rabbit;
 using Eclilar.WebApi.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
 namespace Eclilar.WebApi.Services
 {
 
-    public class RabbitMqServico :BaseService, IRabbitMqServico
+    public class RabbitMqServico : BaseService, IRabbitMqServico
     {
         private readonly ILogger<RabbitMqServico> _logger;
 
         public QueueDeclare CriaFila(QueueDeclare dados)
         {
-             try
+            try
             {
-                var factory = new ConnectionFactory() { HostName = "192.168.0.8" };
+                IConfigurationRoot _configuration = new ConfigurationBuilder()
+.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+.AddJsonFile("appsettings.json")
+.Build();
+                var factory = new ConnectionFactory()
+                {
+                    HostName = _configuration.GetValue<string>("Modules:RabbitMq:HostName"),
+                    VirtualHost = _configuration.GetValue<string>("Modules:RabbitMq:VirtualHost"),
+                    UserName = _configuration.GetValue<string>("Modules:RabbitMq:UserName"),
+                    Password = _configuration.GetValue<string>("Modules:RabbitMq:Password")
+                };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel())
                 {
@@ -27,14 +38,14 @@ namespace Eclilar.WebApi.Services
                                          autoDelete: false,
                                          arguments: null);
 
-                   
 
-                    
+
+
                 }
             }
             catch (Exception ex)
             {
-                 Console.WriteLine(" [x] error {0}",ex.Message.ToString());
+                Console.WriteLine(" [x] error {0}", ex.Message.ToString());
             }
             return null;
         }
@@ -43,7 +54,17 @@ namespace Eclilar.WebApi.Services
         {
             try
             {
-                var factory = new ConnectionFactory() { HostName = "192.168.0.8" };
+                IConfigurationRoot _configuration = new ConfigurationBuilder()
+.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+.AddJsonFile("appsettings.json")
+.Build();
+                var factory = new ConnectionFactory()
+                {
+                    HostName = _configuration.GetValue<string>("Modules:RabbitMq:HostName"),
+                    VirtualHost = _configuration.GetValue<string>("Modules:RabbitMq:VirtualHost"),
+                    UserName = _configuration.GetValue<string>("Modules:RabbitMq:UserName"),
+                    Password = _configuration.GetValue<string>("Modules:RabbitMq:Password")
+                };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel())
                 {
@@ -61,9 +82,9 @@ namespace Eclilar.WebApi.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(" [x] error {0}",ex.Message.ToString());
+                Console.WriteLine(" [x] error {0}", ex.Message.ToString());
                 return null;
             }
         }
     }
-    }
+}
