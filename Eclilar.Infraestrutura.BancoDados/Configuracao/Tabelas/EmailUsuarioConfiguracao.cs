@@ -9,10 +9,8 @@ namespace Eclilar.Infraestrutura.BancoDados.Configuracao.Tabelas
         public void Configure(EntityTypeBuilder<EmailUsuarioModel> builder)
         {
             builder.ToTable("user");
-
-                builder.HasKey(e => e.UserId)
-                .HasName("AI");
-
+             builder.HasNoKey();
+             
             builder.Property(e => e.UserId)
                 .HasColumnName("user_id");          
 

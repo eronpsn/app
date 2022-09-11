@@ -10,8 +10,7 @@ namespace Eclilar.Infraestrutura.BancoDados.Configuracao.Tabelas
         {
             builder.ToTable("professional");
 
-                builder.HasKey(e => e.ProfessionalId)
-                .HasName("AI");
+                builder.HasNoKey();
 
             builder.Property(e => e.ProfessionalId)
                 .HasColumnName("professional_id");          
