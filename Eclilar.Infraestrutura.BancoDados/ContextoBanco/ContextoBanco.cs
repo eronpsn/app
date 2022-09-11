@@ -20,6 +20,8 @@ namespace Eclilar.Infraestrutura.BancoDados
         public virtual DbSet<Atendimento> TSolicitacao { get; set; }
         public virtual DbSet<Agenda> TAgenda { get; set; }
         public virtual DbSet<ProfissionalEspecializacao> TProfiEspecializao { get; set; }
+        public virtual DbSet<EmailProfissionalModel> TEmailProfissional { get; set; }
+        public virtual DbSet<EmailUsuarioModel> TEmailUsuario { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("eronpsn_eclilar")

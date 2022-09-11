@@ -86,5 +86,22 @@ namespace Eclilar.WebApi.Services
                 return null;
             }
         }
+        public void CriarFilaEnviaMsg(string queue, string routingKey, string msg)
+        {
+            var fila = new QueueDeclare
+            {
+                Queue = queue
+            };
+            CriaFila(fila);
+            var notificacao = new Notificacao
+            {
+                RoutingKey = routingKey,
+                Message = msg
+
+            };
+            EnviaNotificacao(notificacao);
+
+        }
+
     }
 }

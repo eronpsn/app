@@ -58,5 +58,13 @@ namespace Eclilar.Infraestrutura.BancoDados.Repositorios
             return await _contextoBanco.SaveChangesAsync();
             
         }
+        public async Task<EmailUsuarioModel> EmailUsuario(int userId)
+        {
+           string sql = string.Format(@"SELECT user_id, user_email
+                                        FROM user 
+                                        WHERE user_id = {0} ", userId);
+            return await _contextoBanco.TEmailUsuario.FromSqlRaw(sql).FirstOrDefaultAsync();
+          
+        }
     }
 }

@@ -48,5 +48,13 @@ namespace Eclilar.Infraestrutura.BancoDados.Repositorios
                     ToListAsync();
         }
 
+        public async Task<EmailProfissionalModel> EmailProfissional(int profissionalId)
+        {
+           string sql = string.Format(@"SELECT p.professional_id, p.professional_email
+                                        FROM professional p 
+                                        WHERE p.professional_id = {0} ", profissionalId);
+            return await _contextoBanco.TEmailProfissional.FromSqlRaw(sql).FirstOrDefaultAsync();
+          
+        }
     }
 }

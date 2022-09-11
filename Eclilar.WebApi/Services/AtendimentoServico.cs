@@ -17,14 +17,17 @@ namespace Eclilar.WebApi.Services
         private readonly ILogger<IAtendimentoServico> _logger;
         private readonly IAtendimentoRepositorio _atendRepositorio;
         private readonly IRabbitMqServico _rabbit;
-
+        private readonly IProfissionalRepositorio _profRepositorio;
+        private readonly IUsuarioRepositorio _userRepositorio;
 
         // inject your database here for user validation
-        public AtendimentoServico(ILogger<IAtendimentoServico> logger, IAtendimentoRepositorio atendRepositorio, IRabbitMqServico rabbit)
+        public AtendimentoServico(ILogger<IAtendimentoServico> logger, IAtendimentoRepositorio atendRepositorio, IRabbitMqServico rabbit, IProfissionalRepositorio profRepositorio, IUsuarioRepositorio userRepositorio)
         {
             _logger = logger;
             _atendRepositorio = atendRepositorio;
             _rabbit = rabbit;
+            _profRepositorio = profRepositorio;
+            _userRepositorio = userRepositorio;
         }
 
         public async Task<IEnumerable<VisualizaAtendimento>> BuscaAtendimentos(int idtUser)
@@ -64,18 +67,22 @@ namespace Eclilar.WebApi.Services
                 Sintomas = request.Sintomas,
             };
             var retorno = await _atendRepositorio.NovaSolicitacao(solicitacao);
-            var fila = new QueueDeclare
-            {
-                Queue = request.ProfessionalEmail+"_p"
-            };
-            _rabbit.CriaFila(fila);
-            var notificacao = new Notificacao
-            {
-                RoutingKey = request.ProfessionalEmail+"_p",
-                Message = "#1#"
+            string queue = request.ProfessionalEmail + "_p";
+            string routingKey = request.ProfessionalEmail + "_p";
+            string msg = "#1#";
+            _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
+            /* var fila = new QueueDeclare
+             {
+                 Queue = request.ProfessionalEmail+"_p"
+             };
+             _rabbit.CriaFila(fila);
+             var notificacao = new Notificacao
+             {
+                 RoutingKey = request.ProfessionalEmail+"_p",
+                 Message = "#1#"
 
-            };
-            _rabbit.EnviaNotificacao(notificacao);
+             };
+             _rabbit.EnviaNotificacao(notificacao);*/
             return retorno;
 
         }
@@ -113,6 +120,30 @@ namespace Eclilar.WebApi.Services
 
             };
             var retorno = await _atendRepositorio.AlteraSolicitacao(solicitacao);
+            string queue = string.Empty;
+            string routingKey = string.Empty;
+            string msg = string.Empty;
+            switch (statusAtendimento)
+            {
+                case 4:
+                    var dadosProfissial = await _profRepositorio.EmailProfissional(solBanco.ProfessionalId);
+                    queue = dadosProfissial.ProfessionalEmail + "_p";
+                    routingKey = dadosProfissial.ProfessionalEmail + "_p";
+                    msg = "#1#";
+                    _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
+                    break;
+                case 5:
+                    var dadosUser = await _userRepositorio.EmailUsuario(solBanco.UserId);
+                    queue = dadosUser.UserEmail + "_p";
+                    routingKey = dadosUser.UserEmail + "_p";
+                    msg = "#1#";
+                    _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
+                    break;
+                default:
+                    break;
+            }
+
+
             return retorno;
 
         }
@@ -151,6 +182,12 @@ namespace Eclilar.WebApi.Services
 
             };
             var retorno = await _atendRepositorio.AlteraSolicitacao(solicitacao);
+            var dadosUser = await _userRepositorio.EmailUsuario(solBanco.UserId);
+            string queue = dadosUser.UserEmail + "_p";
+            string routingKey = dadosUser.UserEmail + "_p";
+            string msg = "#1#";
+            _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
+
             return retorno;
 
         }
@@ -191,6 +228,13 @@ namespace Eclilar.WebApi.Services
 
             };
             var retorno = await _atendRepositorio.AlteraSolicitacao(solicitacao);
+
+            var dadosUser = await _userRepositorio.EmailUsuario(solBanco.UserId);
+            string queue = dadosUser.UserEmail + "_p";
+            string routingKey = dadosUser.UserEmail + "_p";
+            string msg = "#1#";
+            _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
+
             return retorno;
 
         }

@@ -7,5 +7,6 @@ namespace Eclilar.WebApi.Interfaces
     {
         QueueDeclare CriaFila(QueueDeclare dados);
         Notificacao EnviaNotificacao(Notificacao dados);
+       void CriarFilaEnviaMsg(string queue, string routingKey, string msg);
     }
 }

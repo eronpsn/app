@@ -12,7 +12,7 @@ namespace Eclilar.Dominio.Interfaces.Repositorios {
 
         Task<ProfissionalModel> InscricaoProfissional(ProfissionalModel user);
         Task<int> SalvaEspecializacao(ProfissionalEspecializacao dados);
-
+        Task<EmailUsuarioModel> EmailUsuario(int userId);
        
     }
 }

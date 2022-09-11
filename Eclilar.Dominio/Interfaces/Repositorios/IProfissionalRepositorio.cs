@@ -9,6 +9,7 @@ namespace Eclilar.Dominio.Interfaces.Repositorios
          Task<IEnumerable<ProfissionalModel>> BuscaTodos();
          Task<IEnumerable<Categoria>> BuscaCategoria(int specialtyId);
          Task<IEnumerable<ProfissionalModel>> ProcuraProfissional(string specialtyId);
+         Task<EmailProfissionalModel> EmailProfissional(int profissionalId);
         
     }
 }
