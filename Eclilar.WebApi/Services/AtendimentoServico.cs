@@ -125,17 +125,17 @@ namespace Eclilar.WebApi.Services
             string msg = string.Empty;
             switch (statusAtendimento)
             {
-                case 4:
+                case 4: //cancelado pelo usuário
                     var dadosProfissial = await _profRepositorio.EmailProfissional(solBanco.ProfessionalId);
                     queue = dadosProfissial.ProfessionalEmail + "_p";
                     routingKey = dadosProfissial.ProfessionalEmail + "_p";
                     msg = "#1#";
                     _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
                     break;
-                case 5:
+                case 5: //cancelado pelo profisional
                     var dadosUser = await _userRepositorio.EmailUsuario(solBanco.UserId);
-                    queue = dadosUser.UserEmail + "_p";
-                    routingKey = dadosUser.UserEmail + "_p";
+                    queue = dadosUser.UserEmail + "_u";
+                    routingKey = dadosUser.UserEmail + "_u";
                     msg = "#1#";
                     _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
                     break;
@@ -183,8 +183,8 @@ namespace Eclilar.WebApi.Services
             };
             var retorno = await _atendRepositorio.AlteraSolicitacao(solicitacao);
             var dadosUser = await _userRepositorio.EmailUsuario(solBanco.UserId);
-            string queue = dadosUser.UserEmail + "_p";
-            string routingKey = dadosUser.UserEmail + "_p";
+            string queue = dadosUser.UserEmail + "_u";
+            string routingKey = dadosUser.UserEmail + "_u";
             string msg = "#1#";
             _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
 
@@ -230,8 +230,8 @@ namespace Eclilar.WebApi.Services
             var retorno = await _atendRepositorio.AlteraSolicitacao(solicitacao);
 
             var dadosUser = await _userRepositorio.EmailUsuario(solBanco.UserId);
-            string queue = dadosUser.UserEmail + "_p";
-            string routingKey = dadosUser.UserEmail + "_p";
+            string queue = dadosUser.UserEmail + "_u";
+            string routingKey = dadosUser.UserEmail + "_u";
             string msg = "#1#";
             _rabbit.CriarFilaEnviaMsg(queue, routingKey, msg);
 
